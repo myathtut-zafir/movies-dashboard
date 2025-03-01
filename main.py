@@ -4,13 +4,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 df=pd.read_csv('./data/imdb_top_1000.csv')
 
-st.set_page_config(page_title='Movies Dashboard', page_icon=':bar_chart:', layout='wide')
-menu=st.sidebar.selectbox('Menu',['Home','Release Year',"Bar Chart","Filter By Artist"])
+st.set_page_config(page_title='IMDB Movies Dashboard', page_icon='🎬', layout='wide')
+menu=st.sidebar.selectbox('Menu',['Home','Filter By Release Year',"Filter By Artist","Bar Chart"])
 items_per_page = 10
 total_items = len(df)
 total_pages=(total_items // items_per_page) + (1 if total_items % items_per_page > 0 else 0)
-
-
 
 if menu == 'Home':
     st.title('Welcome to the Movies Dashboard')
@@ -20,7 +18,7 @@ if menu == 'Home':
     start_idx = (page - 1) * items_per_page
     end_idx = start_idx + items_per_page
     st.dataframe(df.iloc[start_idx:end_idx])
-elif menu == 'Release Year':
+elif menu == 'Filter By Release Year':
     st.title('Movies by Release Year')
     release_year=st.selectbox('Release Year',df['Released_Year'].unique())
     filter_df=df['Released_Year']==release_year
@@ -31,7 +29,7 @@ elif menu == 'Release Year':
     end_idx = start_idx + items_per_page
     st.dataframe(df[filter_df][start_idx:end_idx])
 elif menu == 'Bar Chart':
-    st.title('Movies by Release Year By Bar Chat')
+    st.title('Release Year By Bar Chat')
     df_count=df.groupby('Released_Year')['Series_Title'].value_counts().reset_index(name='Count')
     fig = px.bar(df_count, x='Released_Year', y='Count', title='Movies by Release Year')
     st.plotly_chart(fig,use_container_width=True)
